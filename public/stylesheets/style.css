@@ -1,13 +1,15 @@
 main, html{
   background-color: beige;
+  margin: 0 auto;
 }
-
 
 header {
   background: linear-gradient(to right, #10b761, #55bcfc);
   padding: 20px;
   color: white;
   text-align: center;
+  margin: 0 auto;
+  margin-left: 0px;
 }
 
 .stuff{
@@ -16,7 +18,7 @@ header {
 }
 
 .login{
-  background-color: #5ab6f0;
+  background-color: #8dc9ef;
   border: 10px solid #d73939;
   box-shadow: 0 0 10px #d73939;
   margin: 0 auto;
