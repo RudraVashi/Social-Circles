@@ -22,6 +22,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+app.get('/leaderboard', (req, res) => {
+  const players = [
+      { username: 'JohnDoe123', highScore: 300 },
+      { username: 'JaneSmith', highScore: 250 },
+      { username: 'CoolPlayer', highScore: 200 }
+  ];
+  res.render('leaderboard', { 
+      title: 'Leaderboard',
+      players
+  });
+});
+
+
 var accountinfoRouter = require('./routes/accountinfo');
 app.use('/accountinfo', accountinfoRouter);
 
