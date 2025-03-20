@@ -105,3 +105,22 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.leaderboard-container {
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard th, .leaderboard td {
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+.leaderboard th {
+  background-color: #f4f4f4;
+}
