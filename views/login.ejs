@@ -1,0 +1,26 @@
+<%- include('./partials/header') %>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="stuff">
+        <div class ="login">
+            <h1>Login Page</h1>
+            <div class = "forms">
+                <form action="/accountinfo" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username here"required><br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password here "required><br><br>
+                    <input type="submit" value="Login In" >
+                </form>
+            </div> 
+        </div>  
+    </div>
+    <div class="login-link">
+        <p> Not registered an acoount yet? <a href="/signup">Sign up here</a></p>
+    </div>
+    
+</body>
+</html>
