@@ -10,7 +10,6 @@ router.post('/signup', async (req, res) => {
     const email = req.body.email || null;
     const biography = req.body.biography || null;
     
-    // Validation
     if (!username || !email || !password) {
         return res.status(400).send("Email, username, and password are required");
     }
@@ -34,7 +33,6 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Fetch user by username
         const [users] = await db.execute("SELECT * FROM users WHERE username = ?", [username]);
 
         if (users.length === 0) {
@@ -43,13 +41,12 @@ router.post('/login', async (req, res) => {
 
         const user = users[0];
 
-        // Compare input password with hashed password
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             return res.status(400).send("Invalid username or password");
         }
 
-        res.send(`Welcome back, ${user.username}!`);
+        res.render('accountinfo', { user });
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).send("Error logging in");

@@ -1,38 +1,36 @@
-
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
-
 <body>
     <header>
         <h1>Account Information</h1>
     </header>
-    <div class = "Account">
+    <div class="Account">
         <div class="field">
             <p>Username</p>
-            <span id="username">JohnDoe123</span>
+            <span id="username"><%= user.username %></span>
         </div>
         <div class="field">
             <p>Password</p>
-            <span id="password">test</span>
+            <span id="password">••••••••</span>
         </div>
         <div class="field">
             <p>Email</p>
-            <span id="email">johndoe@example.com</span>
+            <span id="email"><%= user.email || 'Not provided' %></span>
         </div>
         <div class="field">
             <p>Biography</p>
-            <span id="biography">test</span>
+            <span id="biography"><%= user.biography || 'Not provided' %></span>
         </div>
         <div class="field">
             <p>Total Score</p>
-            <span id="totalScore">1200</span>
+            <span id="totalScore"><%= user.total_score || 0 %></span>
         </div>
         <div class="field">
             <p>High Score</p>
-            <span id="highScore">300</span>
+            <span id="highScore"><%= user.high_score || 0 %></span>
         </div>
     </div>
 </body>
