@@ -8,6 +8,7 @@ header {
   padding: 20px;
   color: white;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .stuff{
@@ -65,6 +66,7 @@ header {
 }
 
 .Account{
+  margin-top: 50px;
   justify-content: center;
   text-align: center;
   border: 10px solid #3963d7;
