@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).send("Invalid username or password");
         }
 
-        res.send(`Welcome back, ${user.username}!`);
+        res.render('accountinfo', { user });
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).send("Error logging in");
