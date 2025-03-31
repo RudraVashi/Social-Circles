@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Social Circles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background: #f4f4f4;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+        }
+        .profile-section {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 20px;
+        }
+        .profile {
+            text-align: center;
+        }
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+        .buttons button {
+            display: block;
+            margin: 5px auto;
+            padding: 5px 10px;
+            border: none;
+            background: #008CBA;
+            color: white;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background: #005f6b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>Logo</div>
+        <h1>Social Circles</h1>
+        <div>Welcome, [username]</div>
+    </header>
+    <nav>
+        <a href="#">Home</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/accountinfo">Profile</a>
+    </nav>
+    <div class="container">
+        <h2>Score: [insert score]</h2>
+        <div class="profile-section">
+            <div class="profile">
+                <img src="#" alt="Elliott">
+                <h3>Elliott</h3>
+                <div class="buttons">
+                    <button>Give compliment</button>
+                    <button>Offer help</button>
+                    <button>Invite to event</button>
+                </div>
+            </div>
+            <div class="profile">
+                <img src="#" alt="Rudra">
+                <h3>Rudra</h3>
+                <div class="buttons">
+                    <button>Give compliment</button>
+                    <button>Offer help</button>
+                    <button>Invite to event</button>
+                </div>
+            </div>
+            <div class="profile">
+                <img src="#" alt="Ahmet">
+                <h3>Ahmet</h3>
+                <div class="buttons">
+                    <button>Give compliment</button>
+                    <button>Offer help</button>
+                    <button>Invite to event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
