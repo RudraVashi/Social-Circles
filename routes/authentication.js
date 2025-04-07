@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router(); // Add this line to define router
+const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../database/db');
 
@@ -22,14 +22,11 @@ router.post('/login', async (req, res) => {
 
         const user = users[0];
 
-        // Make sure this matches your database field (password or password_hash)
-        const passwordField = user.password || user.password_hash;
-        const match = await bcrypt.compare(password, passwordField);
+        const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
             return res.redirect('/login?error=invalid');
         }
 
-        // Store user info in session
         req.session.user = {
             id: user.id,
             username: user.username
@@ -52,20 +49,18 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    const {username, password} = req.body;
-    const email = req.body.email || null;
-    const biography = req.body.biography || null;
-    
-    if (!username || !email || !password) {
-        return res.status(400).send("Email, username, and password are required");
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).send("Username and password are required");
     }
     
-    try{
+    try {
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
         await db.execute(
-            'INSERT INTO users (username, email, password, biography) VALUES (?, ?, ?, ?)',
-            [username, email, hashedPassword, biography]
+            'INSERT INTO users (username, password_hash) VALUES (?, ?)',
+            [username, hashedPassword]
         );
 
         res.send("Account created successfully! You can now log in.");
