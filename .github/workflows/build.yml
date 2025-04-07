@@ -1,0 +1,35 @@
+name: Generate HTML from EJS
+
+on:
+  push:
+    branches:
+      - main  # Change to your default branch if different
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Use latest LTS version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Convert EJS to HTML
+        run: node generate-html.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add index.html
+          git commit -m 'Generate index.html from EJS'
+          git push
