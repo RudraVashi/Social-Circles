@@ -102,6 +102,17 @@
         .group-buttons button:hover {
             background: #005f6b;
         }
+        .circle-row {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .group-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -119,15 +130,19 @@
     <div class="container">
         <h2>Score: [insert score]</h2>
       
-        <div class="group-circle">
-            <div class="char char1">
-              <img src="https://via.placeholder.com/300" alt="Elliott">
+        <div class="circle-row">
+            <div class="group-wrapper">
+              <div class="group-circle">
+                <div class="char char1"><img src="https://via.placeholder.com/300" alt="Elliott"></div>
+                <div class="char char2"><img src="https://via.placeholder.com/300" alt="Rudra"></div>
+                <div class="char char3"><img src="https://via.placeholder.com/300" alt="Ahmet"></div>
+              </div>
             </div>
-            <div class="char char2">
-              <img src="https://via.placeholder.com/300" alt="Rudra">
-            </div>
-            <div class="char char3">
-              <img src="https://via.placeholder.com/300" alt="Ahmet">
+            <div class="group-wrapper">
+              <div class="group-circle">
+                <div class="char char1"><img src="https://via.placeholder.com/300" alt="Luna"></div>
+                <div class="char char2"><img src="https://via.placeholder.com/300" alt="Maya"></div>
+                <div class="char char3"><img src="https://via.placeholder.com/300" alt="Jamal"></div>
             </div>
           </div>
       
