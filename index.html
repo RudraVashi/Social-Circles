@@ -53,6 +53,55 @@
         .buttons button:hover {
             background: #005f6b;
         }
+        .group-circle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            border-radius: 50%;
+            border: 5px solid #620edf;
+            background: #f9f9f9;
+            box-shadow: 0 0 10px rgba(206, 9, 9, 0.1);
+        }
+        .char {
+            position: absolute;
+        }
+        .char img {
+            width: 220px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid black;
+        }
+        .char1 {
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .char2 {
+            bottom: 70px;
+            left: 40px;
+        }
+        .char3 {
+            bottom: 70px;
+            right: 40px;
+        }
+        .group-buttons {
+            margin-top: 20px;
+        }
+        .group-buttons button {
+            margin: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            background: #008CBA;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .group-buttons button:hover {
+            background: #005f6b;
+        }
     </style>
 </head>
 <body>
@@ -69,35 +118,24 @@
     </nav>
     <div class="container">
         <h2>Score: [insert score]</h2>
-        <div class="profile-section">
-            <div class="profile">
-                <img src="#" alt="Elliott">
-                <h3>Elliott</h3>
-                <div class="buttons">
-                    <button>Give compliment</button>
-                    <button>Offer help</button>
-                    <button>Invite to event</button>
-                </div>
+      
+        <div class="group-circle">
+            <div class="char char1">
+              <img src="https://via.placeholder.com/300" alt="Elliott">
             </div>
-            <div class="profile">
-                <img src="#" alt="Rudra">
-                <h3>Rudra</h3>
-                <div class="buttons">
-                    <button>Give compliment</button>
-                    <button>Offer help</button>
-                    <button>Invite to event</button>
-                </div>
+            <div class="char char2">
+              <img src="https://via.placeholder.com/300" alt="Rudra">
             </div>
-            <div class="profile">
-                <img src="#" alt="Ahmet">
-                <h3>Ahmet</h3>
-                <div class="buttons">
-                    <button>Give compliment</button>
-                    <button>Offer help</button>
-                    <button>Invite to event</button>
-                </div>
+            <div class="char char3">
+              <img src="https://via.placeholder.com/300" alt="Ahmet">
             </div>
+          </div>
+      
+        <div class="group-buttons">
+          <button>Give compliment</button>
+          <button>Offer help</button>
+          <button>Invite to event</button>
         </div>
-    </div>
+      </div>
 </body>
 </html>
