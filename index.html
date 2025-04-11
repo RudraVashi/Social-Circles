@@ -1,156 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Social Circles</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-        header {
-            background: #f4f4f4;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .container {
-            padding: 20px;
-        }
-        .profile-section {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-top: 20px;
-        }
-        .profile {
-            text-align: center;
-        }
-        .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #ddd;
-        }
-        .buttons button {
-            display: block;
-            margin: 5px auto;
-            padding: 5px 10px;
-            border: none;
-            background: #008CBA;
-            color: white;
-            cursor: pointer;
-        }
-        .buttons button:hover {
-            background: #005f6b;
-        }
-        .group-circle {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 30px auto;
-            border-radius: 50%;
-            border: 5px solid #620edf;
-            background: #f9f9f9;
-            box-shadow: 0 0 10px rgba(206, 9, 9, 0.1);
-        }
-        .char {
-            position: absolute;
-        }
-        .char img {
-            width: 220px;
-            height: 160px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid black;
-        }
-        .char1 {
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .char2 {
-            bottom: 70px;
-            left: 40px;
-        }
-        .char3 {
-            bottom: 70px;
-            right: 40px;
-        }
-        .group-buttons {
-            margin-top: 20px;
-        }
-        .group-buttons button {
-            margin: 10px;
-            padding: 8px 16px;
-            font-size: 14px;
-            border: none;
-            background: #008CBA;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .group-buttons button:hover {
-            background: #005f6b;
-        }
-        .circle-row {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-        .group-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div>Logo</div>
-        <h1>Social Circles</h1>
-        <div>Welcome, [username]</div>
-    </header>
-    <nav>
-        <a href="#">Home</a>
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/accountinfo">Profile</a>
-        <a href="/characters">Characters</a>
-    </nav>
-    <div class="container">
-        <h2>Score: [insert score]</h2>
-      
-        <div class="circle-row">
-            <div class="group-wrapper">
-              <div class="group-circle">
-                <div class="char char1"><img src="https://via.placeholder.com/300" alt="Elliott"></div>
-                <div class="char char2"><img src="https://via.placeholder.com/300" alt="Rudra"></div>
-                <div class="char char3"><img src="https://via.placeholder.com/300" alt="Ahmet"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home - Social Circles</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            header {
+                background: #f4f4f4;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            nav a {
+                margin: 0 15px;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            .container {
+                padding: 20px;
+            }
+            .profile-section {
+                display: flex;
+                justify-content: center;
+                gap: 50px;
+                margin-top: 20px;
+            }
+            .profile {
+                text-align: center;
+            }
+            .profile img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                background: #ddd;
+            }
+            .buttons button {
+                display: block;
+                margin: 5px auto;
+                padding: 5px 10px;
+                border: none;
+                background: #008CBA;
+                color: white;
+                cursor: pointer;
+            }
+            .buttons button:hover {
+                background: #005f6b;
+            }
+            .group-circle {
+                position: relative;
+                width: 300px;
+                height: 300px;
+                margin: 30px auto;
+                border-radius: 50%;
+                border: 5px solid #620edf;
+                background: #f9f9f9;
+                box-shadow: 0 0 10px rgba(206, 9, 9, 0.1);
+            }
+            .char {
+                position: absolute;
+            }
+            .char img {
+                width: 220px;
+                height: 160px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid black;
+            }
+            .char1 {
+                top: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .char2 {
+                bottom: 70px;
+                left: 40px;
+            }
+            .char3 {
+                bottom: 70px;
+                right: 40px;
+            }
+            .group-buttons {
+                margin-top: 20px;
+            }
+            .group-buttons button {
+                margin: 10px;
+                padding: 8px 16px;
+                font-size: 14px;
+                border: none;
+                background: #008CBA;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .group-buttons button:hover {
+                background: #005f6b;
+            }
+            .circle-row {
+                display: flex;
+                justify-content: center;
+                gap: 50px;
+                flex-wrap: wrap;
+            }
+            .group-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            /* New styles for feedback message area */
+            #feedback-area {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                transition: all 0.3s ease;
+                display: none;
+            }
+            .positive-feedback {
+                background-color: #dff0d8;
+                border: 1px solid #d6e9c6;
+                color: #3c763d;
+            }
+            .neutral-feedback {
+                background-color: #fcf8e3;
+                border: 1px solid #faebcc;
+                color: #8a6d3b;
+            }
+            .negative-feedback {
+                background-color: #f2dede;
+                border: 1px solid #ebccd1;
+                color: #a94442;
+            }
+            .score-change {
+                font-weight: bold;
+                margin-top: 10px;
+            }
+            .score-up {
+                color: #3c763d;
+            }
+            .score-down {
+                color: #a94442;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div>Logo</div>
+            <h1>Social Circles</h1>
+            <div>Welcome, [username]</div>
+        </header>
+        <nav>
+            <a href="#">Home</a>
+            <a href="/leaderboard">Leaderboard</a>
+            <a href="/accountinfo">Profile</a>
+            <a href="/characters">Characters</a>
+        </nav>
+        <div class="container">
+            <h2>Score: [insert score]</h2>
+            
+            <!-- New feedback area -->
+            <div id="feedback-area"></div>
+          
+            <div class="circle-row">
+                <div class="group-wrapper">
+                  <div class="group-circle">
+                    <div class="char char1"><img src="https://via.placeholder.com/300" alt="Elliott"></div>
+                    <div class="char char2"><img src="https://via.placeholder.com/300" alt="Rudra"></div>
+                    <div class="char char3"><img src="https://via.placeholder.com/300" alt="Ahmet"></div>
+                  </div>
+                </div>
+                <div class="group-wrapper">
+                  <div class="group-circle">
+                    <div class="char char1"><img src="https://via.placeholder.com/300" alt="Luna"></div>
+                    <div class="char char2"><img src="https://via.placeholder.com/300" alt="Maya"></div>
+                    <div class="char char3"><img src="https://via.placeholder.com/300" alt="Jamal"></div>
+                </div>
               </div>
-            </div>
-            <div class="group-wrapper">
-              <div class="group-circle">
-                <div class="char char1"><img src="https://via.placeholder.com/300" alt="Luna"></div>
-                <div class="char char2"><img src="https://via.placeholder.com/300" alt="Maya"></div>
-                <div class="char char3"><img src="https://via.placeholder.com/300" alt="Jamal"></div>
+          
+            <div class="group-buttons">
+              <button>Give compliment</button>
+              <button>Offer help</button>
+              <button>Invite to event</button>
             </div>
           </div>
-      
-        <div class="group-buttons">
-          <button>Give compliment</button>
-          <button>Offer help</button>
-          <button>Invite to event</button>
-        </div>
-      </div>
+    <script>
+        const characterNames = [
+            "Elliott", "Rudra", "Ahmet",
+            "Luna", "Maya", "Jamal"
+        ];
+
+        let characters = [];
+        let circles = [];
+        let playerScore = 0;
+
+        function initializeCharacters() {
+            characters = characterNames.map((name, index) => {
+                return {
+                    name: name,
+                    preferences: {
+                        compliment: Math.floor(Math.random() * 11) - 5,
+                        help: Math.floor(Math.random() * 11) - 5,
+                        event: Math.floor(Math.random() * 11) - 5
+                    }
+                };
+            });
+            
+            circles = [
+                { name: "Circle 1", characters: characters.slice(0, 3) },
+                { name: "Circle 2", characters: characters.slice(3, 6) }
+            ];
+            
+            console.log("Generated character preferences:", characters);
+        }
+
+        function updateScoreDisplay() {
+            document.querySelector('h2').textContent = `Score: ${playerScore}`;
+        }
+
+        function calculateReactionScore(action) {
+            let totalReaction = 0;
+            
+            characters.forEach(character => {
+                totalReaction += character.preferences[action];
+            });
+            
+            return totalReaction;
+        }
+
+        function setupActionButtons() {
+            const buttons = document.querySelectorAll('.group-buttons button');
+            
+            buttons[0].addEventListener('click', () => handleAction('compliment'));
+            buttons[1].addEventListener('click', () => handleAction('help'));
+            buttons[2].addEventListener('click', () => handleAction('event'));
+        }
+
+        function evolveCharacterPreferences() {
+            characters.forEach(character => {
+                character.preferences.compliment += Math.floor(Math.random() * 5) - 2;
+                character.preferences.help += Math.floor(Math.random() * 5) - 2;
+                character.preferences.event += Math.floor(Math.random() * 5) - 2;
+                
+                character.preferences.compliment = Math.max(-5, Math.min(5, character.preferences.compliment));
+                character.preferences.help = Math.max(-5, Math.min(5, character.preferences.help));
+                character.preferences.event = Math.max(-5, Math.min(5, character.preferences.event));
+            });
+            
+            console.log("Updated character preferences:", characters);
+        }
+
+        function handleAction(action) {
+            const reactionScore = calculateReactionScore(action);
+            
+            let scoreChange;
+            
+            if (reactionScore >= 0) {
+                scoreChange = 10 + reactionScore;
+            } else {
+                if (reactionScore < -10) {
+                    scoreChange = reactionScore - 30;
+                } else if (reactionScore < -5) {
+                    scoreChange = reactionScore / 2;
+                } else {
+                    scoreChange = 5 + reactionScore;
+                }
+            }
+            
+            playerScore += scoreChange;
+            
+            displayActionFeedback(action, reactionScore, scoreChange);
+            
+            updateScoreDisplay();
+            
+            evolveCharacterPreferences();
+        }
+
+        function displayActionFeedback(action, reactionScore, scoreChange) {
+            let message = '';
+            let feedbackClass = '';
+            let scoreChangeMessage = '';
+            let scoreChangeClass = scoreChange >= 0 ? 'score-up' : 'score-down';
+            
+            if (reactionScore > 10) {
+                message = `Great choice! Everyone loved your ${action}!`;
+                feedbackClass = 'positive-feedback';
+            } else if (reactionScore > 0) {
+                message = `Good choice! Most characters appreciated your ${action}.`;
+                feedbackClass = 'positive-feedback';
+            } else if (reactionScore === 0) {
+                message = `Mixed reactions to your ${action}. Some liked it, some didn't.`;
+                feedbackClass = 'neutral-feedback';
+            } else if (reactionScore > -10) {
+                message = `That didn't go well. Most characters didn't appreciate your ${action}.`;
+                feedbackClass = 'negative-feedback';
+            } else {
+                message = `Ouch! That was a bad move. Almost everyone disliked your ${action}!`;
+                feedbackClass = 'negative-feedback';
+            }
+            
+            if (scoreChange >= 0) {
+                scoreChangeMessage = `You gained ${scoreChange} points!`;
+            } else {
+                scoreChangeMessage = `You lost ${Math.abs(scoreChange)} points!`;
+            }
+            
+            const feedbackArea = document.getElementById('feedback-area');
+            feedbackArea.className = feedbackClass;
+            feedbackArea.innerHTML = `
+                <div>${message}</div>
+                <div class="score-change ${scoreChangeClass}">${scoreChangeMessage}</div>
+            `;
+            feedbackArea.style.display = 'block';
+        }
+        window.onload = function() {
+            initializeCharacters();
+            
+            playerScore = 0;
+            updateScoreDisplay();
+            
+            setupActionButtons();
+        };
+    </script>
 </body>
 </html>
