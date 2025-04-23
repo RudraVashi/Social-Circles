@@ -191,143 +191,321 @@
             </div>
           </div>
     <script>
-        const characterNames = [
-            "Elliott", "Rudra", "Ahmet",
-            "Luna", "Maya", "Jamal"
+        // Character data with preferences - stronger negatives to ensure negative circle options
+        const characters = [
+        { id: 'elliott', name: 'Elliott', preferences: { invite: 8, help: 5, compliment: -10 } },
+        { id: 'rudra', name: 'Rudra', preferences: { invite: -10, help: 9, compliment: 4 } },
+        { id: 'ahmet', name: 'Ahmet', preferences: { invite: 3, help: -10, compliment: 8 } },
+        { id: 'luna', name: 'Luna', preferences: { invite: 9, help: 3, compliment: -10 } },
+        { id: 'maya', name: 'Maya', preferences: { invite: -10, help: 7, compliment: 6 } },
+        { id: 'jamal', name: 'Jamal', preferences: { invite: 7, help: -10, compliment: 9 } }
         ];
 
-        let characters = [];
-        let circles = [];
-        let playerScore = 0;
+        let circles = [
+        { id: 'circle1', characters: ['elliott', 'rudra', 'ahmet'] },
+        { id: 'circle2', characters: ['luna', 'maya', 'jamal'] }
+        ];
 
-        function initializeCharacters() {
-            characters = characterNames.map((name, index) => {
-                return {
-                    name: name,
-                    preferences: {
-                        compliment: Math.floor(Math.random() * 11) - 5,
-                        help: Math.floor(Math.random() * 11) - 5,
-                        event: Math.floor(Math.random() * 11) - 5
-                    }
-                };
-            });
-            
-            circles = [
-                { name: "Circle 1", characters: characters.slice(0, 3) },
-                { name: "Circle 2", characters: characters.slice(3, 6) }
-            ];
-            
-            console.log("Generated character preferences:", characters);
-        }
-
-        function updateScoreDisplay() {
-            document.querySelector('h2').textContent = `Score: ${playerScore}`;
-        }
-
-        function calculateReactionScore(action) {
-            let totalReaction = 0;
-            
-            characters.forEach(character => {
-                totalReaction += character.preferences[action];
-            });
-            
-            return totalReaction;
-        }
-
-        function setupActionButtons() {
-            const buttons = document.querySelectorAll('.group-buttons button');
-            
-            buttons[0].addEventListener('click', () => handleAction('compliment'));
-            buttons[1].addEventListener('click', () => handleAction('help'));
-            buttons[2].addEventListener('click', () => handleAction('event'));
-        }
-
-        function evolveCharacterPreferences() {
-            characters.forEach(character => {
-                character.preferences.compliment += Math.floor(Math.random() * 5) - 2;
-                character.preferences.help += Math.floor(Math.random() * 5) - 2;
-                character.preferences.event += Math.floor(Math.random() * 5) - 2;
-                
-                character.preferences.compliment = Math.max(-5, Math.min(5, character.preferences.compliment));
-                character.preferences.help = Math.max(-5, Math.min(5, character.preferences.help));
-                character.preferences.event = Math.max(-5, Math.min(5, character.preferences.event));
-            });
-            
-            console.log("Updated character preferences:", characters);
-        }
-
-        function handleAction(action) {
-            const reactionScore = calculateReactionScore(action);
-            
-            let scoreChange;
-            
-            if (reactionScore >= 0) {
-                scoreChange = 10 + reactionScore;
-            } else {
-                if (reactionScore < -10) {
-                    scoreChange = reactionScore - 30;
-                } else if (reactionScore < -5) {
-                    scoreChange = reactionScore / 2;
-                } else {
-                    scoreChange = 5 + reactionScore;
-                }
-            }
-            
-            playerScore += scoreChange;
-            
-            displayActionFeedback(action, reactionScore, scoreChange);
-            
-            updateScoreDisplay();
-            
-            evolveCharacterPreferences();
-        }
-
-        function displayActionFeedback(action, reactionScore, scoreChange) {
-            let message = '';
-            let feedbackClass = '';
-            let scoreChangeMessage = '';
-            let scoreChangeClass = scoreChange >= 0 ? 'score-up' : 'score-down';
-            
-            if (reactionScore > 10) {
-                message = `Great choice! Everyone loved your ${action}!`;
-                feedbackClass = 'positive-feedback';
-            } else if (reactionScore > 0) {
-                message = `Good choice! Most characters appreciated your ${action}.`;
-                feedbackClass = 'positive-feedback';
-            } else if (reactionScore === 0) {
-                message = `Mixed reactions to your ${action}. Some liked it, some didn't.`;
-                feedbackClass = 'neutral-feedback';
-            } else if (reactionScore > -10) {
-                message = `That didn't go well. Most characters didn't appreciate your ${action}.`;
-                feedbackClass = 'negative-feedback';
-            } else {
-                message = `Ouch! That was a bad move. Almost everyone disliked your ${action}!`;
-                feedbackClass = 'negative-feedback';
-            }
-            
-            if (scoreChange >= 0) {
-                scoreChangeMessage = `You gained ${scoreChange} points!`;
-            } else {
-                scoreChangeMessage = `You lost ${Math.abs(scoreChange)} points!`;
-            }
-            
-            const feedbackArea = document.getElementById('feedback-area');
-            feedbackArea.className = feedbackClass;
-            feedbackArea.innerHTML = `
-                <div>${message}</div>
-                <div class="score-change ${scoreChangeClass}">${scoreChangeMessage}</div>
-            `;
-            feedbackArea.style.display = 'block';
-        }
-
-        window.onload = function() {
-            initializeCharacters();
-            
-            playerScore = 0;
-            updateScoreDisplay();
-            
-            setupActionButtons();
+        let gameState = {
+        score: 0,
+        selectedCircle: null,
+        history: []
         };
+
+        let shuffleTimer = null;
+
+        function getCharacter(characterId) {
+        return characters.find(char => char.id === characterId);
+        }
+
+        function getCircle(circleId) {
+        return circles.find(circle => circle.id === circleId);
+        }
+
+        // Calculate score for a specific action on a specific circle
+        function calculateScore(circleId, action) {
+        const circle = getCircle(circleId);
+        if (!circle) return 0;
+        
+        let totalScore = 0;
+        
+        circle.characters.forEach(characterId => {
+            const character = getCharacter(characterId);
+            if (!character) return;
+            
+            // Add the preference score for this character and action
+            totalScore += character.preferences[action];
+        });
+        
+        // Return score information
+        return {
+            raw: totalScore
+        };
+        }
+
+        // Calculate and check if each circle has at least one negative action
+        function checkCirclesHaveNegativeAction() {
+        circles.forEach(circle => {
+            const actions = ['invite', 'help', 'compliment'];
+            const scores = actions.map(action => {
+            let score = 0;
+            circle.characters.forEach(charId => {
+                const char = getCharacter(charId);
+                score += char.preferences[action];
+            });
+            return { action, score };
+            });
+            
+            console.log(`Circle ${circle.id} action scores:`, scores);
+        });
+        }
+
+        // Function to ensure each circle has at least one negative action
+        function ensureNegativeActions() {
+        // First shuffle to randomize
+        shuffleCircles(false); 
+        
+        const actions = ['invite', 'help', 'compliment'];
+        
+        let allCirclesHaveNegativeAction = true;
+        
+        circles.forEach(circle => {
+            let hasNegativeAction = false;
+            
+            actions.forEach(action => {
+            let score = 0;
+            circle.characters.forEach(charId => {
+                const char = getCharacter(charId);
+                score += char.preferences[action];
+            });
+            
+            if (score < 0) {
+                hasNegativeAction = true;
+            }
+            });
+            
+            if (!hasNegativeAction) {
+            allCirclesHaveNegativeAction = false;
+            }
+        });
+        
+        if (!allCirclesHaveNegativeAction) {
+            ensureNegativeActions();
+        }
+        }
+
+        // Perform an action on a circle
+        function performAction(circleId, action) {
+        if (!['invite', 'help', 'compliment'].includes(action)) {
+            throw new Error("Invalid action. Must be 'invite', 'help', or 'compliment'");
+        }
+        
+        const scoreResult = calculateScore(circleId, action);
+        gameState.score += scoreResult.raw; // This can now be negative
+        
+        gameState.history.push({
+            circleId,
+            action,
+            score: scoreResult.raw,
+            characters: getCircle(circleId).characters.map(id => getCharacter(id).name)
+        });
+        
+        return {
+            scoreResult,
+            gameState: { ...gameState }
+        };
+        }
+
+        // Shuffle characters between circles
+        function shuffleCircles(showNotification = true) {
+        // Collect all character IDs
+        const allCharacterIds = circles.flatMap(circle => circle.characters);
+        
+        // Shuffle the array
+        for (let i = allCharacterIds.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allCharacterIds[i], allCharacterIds[j]] = [allCharacterIds[j], allCharacterIds[i]];
+        }
+        
+        // Redistribute characters to circles
+        const charactersPerCircle = Math.floor(allCharacterIds.length / circles.length);
+        
+        circles = circles.map((circle, index) => {
+            const start = index * charactersPerCircle;
+            const end = (index === circles.length - 1) 
+            ? allCharacterIds.length 
+            : start + charactersPerCircle;
+            
+            return {
+            ...circle,
+            characters: allCharacterIds.slice(start, end)
+            };
+        });
+        
+        updateCircleDisplay();
+        
+        // Show feedback that circles were shuffled
+        if (showNotification) {
+            const feedbackArea = document.getElementById('feedback-area');
+            feedbackArea.className = 'neutral-feedback';
+            feedbackArea.innerHTML = '<p>Characters have been shuffled between circles!</p>';
+            feedbackArea.style.display = 'block';
+            
+            setTimeout(() => {
+            feedbackArea.style.display = 'none';
+            }, 2000);
+        }
+        
+        return [...circles];
+        }
+
+        // DOM interaction functions
+        function updateScoreDisplay() {
+        const scoreElement = document.querySelector('h2');
+        scoreElement.textContent = `Score: ${gameState.score}`;
+        }
+
+        function updateCircleDisplay() {
+        // Update the character images in each circle
+        const circleElements = document.querySelectorAll('.group-circle');
+        
+        circles.forEach((circle, index) => {
+            if (index >= circleElements.length) return;
+            
+            const charElements = circleElements[index].querySelectorAll('.char img');
+            circle.characters.forEach((charId, charIndex) => {
+            if (charIndex >= charElements.length) return;
+            
+            // Set the alt text to the character name
+            charElements[charIndex].alt = getCharacter(charId).name;
+            
+            // In a real implementation, you would set the src to the character's image
+            // For now, we'll keep the placeholders
+            });
+        });
+        }
+
+        function showFeedback(circleId, action, scoreResult) {
+        const feedbackArea = document.getElementById('feedback-area');
+        const circle = getCircle(circleId);
+        const characters = circle.characters.map(id => getCharacter(id).name).join(', ');
+        
+        // Determine feedback type based on raw score
+        let feedbackType, message, scoreChangeClass;
+        
+        if (scoreResult.raw > 0) {
+            feedbackType = 'positive-feedback';
+            message = `Great choice! ${characters} really appreciated your ${action}!`;
+            scoreChangeClass = 'score-up';
+        } else if (scoreResult.raw === 0) {
+            feedbackType = 'neutral-feedback';
+            message = `${characters} had mixed feelings about your ${action}.`;
+            scoreChangeClass = '';
+        } else {
+            feedbackType = 'negative-feedback';
+            message = `${characters} didn't like your ${action}. Not a good choice!`;
+            scoreChangeClass = 'score-down';
+        }
+        
+        // Set the feedback
+        feedbackArea.className = feedbackType;
+        feedbackArea.innerHTML = `
+            <p>${message}</p>
+            <div class="score-change ${scoreChangeClass}">${scoreResult.raw > 0 ? '+' : ''}${scoreResult.raw} points</div>
+        `;
+        
+        feedbackArea.style.display = 'block';
+        
+        // Hide the feedback after some time
+        setTimeout(() => {
+            feedbackArea.style.display = 'none';
+        }, 3000);
+        }
+
+        // Start the automatic shuffle timer (every 5 minutes)
+        function startShuffleTimer() {
+        // Clear any existing timer
+        if (shuffleTimer) {
+            clearInterval(shuffleTimer);
+        }
+        
+        // Set the new timer - 5 minutes = 300000 milliseconds
+        shuffleTimer = setInterval(() => {
+            shuffleCircles();
+            // After shuffling, ensure there's at least one negative action
+            checkCirclesHaveNegativeAction();
+        }, 300000); // 5 minutes
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            updateScoreDisplay();
+        
+        // Initial shuffle to randomize starting positions and ensure negative actions
+        ensureNegativeActions();
+        
+        // Debug check
+        checkCirclesHaveNegativeAction();
+        
+        // Set up click handlers for circles
+        const circleElements = document.querySelectorAll('.group-circle');
+        circleElements.forEach((circle, index) => {
+            circle.addEventListener('click', () => {
+            circleElements.forEach(c => c.style.borderColor = '#620edf');
+            circle.style.borderColor = '#ff5500';
+            
+            gameState.selectedCircle = `circle${index + 1}`;
+            });
+        });
+        
+        const actionButtons = document.querySelectorAll('.group-buttons button');
+        
+        actionButtons[0].addEventListener('click', () => {
+            if (!gameState.selectedCircle) {
+            alert('Please select a circle first!');
+            return;
+            }
+            
+            const result = performAction(gameState.selectedCircle, 'compliment');
+            updateScoreDisplay();
+            showFeedback(gameState.selectedCircle, 'compliment', result.scoreResult);
+            
+            gameState.selectedCircle = null;
+            circleElements.forEach(c => c.style.borderColor = '#620edf');
+        });
+        
+        actionButtons[1].addEventListener('click', () => {
+            if (!gameState.selectedCircle) {
+            alert('Please select a circle first!');
+            return;
+            }
+            
+            const result = performAction(gameState.selectedCircle, 'help');
+            updateScoreDisplay();
+            showFeedback(gameState.selectedCircle, 'help', result.scoreResult);
+            
+            gameState.selectedCircle = null;
+            circleElements.forEach(c => c.style.borderColor = '#620edf');
+        });
+        
+        actionButtons[2].addEventListener('click', () => {
+            if (!gameState.selectedCircle) {
+            alert('Please select a circle first!');
+            return;
+            }
+            
+            const result = performAction(gameState.selectedCircle, 'invite');
+            updateScoreDisplay();
+            showFeedback(gameState.selectedCircle, 'invite', result.scoreResult);
+            
+            // Reset selection
+            gameState.selectedCircle = null;
+            circleElements.forEach(c => c.style.borderColor = '#620edf');
+        });
+        
+        // Start the automatic shuffle timer
+        startShuffleTimer();
+        });
     </script>
 </body>
 </html>
