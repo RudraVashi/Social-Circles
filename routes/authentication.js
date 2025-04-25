@@ -48,25 +48,57 @@ router.get('/logout', (req, res) => {
     });
 });
 
+router.get('/signup', (req, res) => {
+    const error = req.query.error || null;
+    res.render('signup', { error });
+});
+
 router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     if (!username || !password) {
-        return res.status(400).send("Username and password are required");
+        return res.redirect('/signup?error=Username and password are required');
+    }
+    
+    // Basic email validation if provided
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.redirect('/signup?error=Invalid email format');
     }
     
     try {
+        // Check if username already exists
+        const [existingUsers] = await db.execute(
+            'SELECT * FROM users WHERE username = ?',
+            [username]
+        );
+        
+        if (existingUsers.length > 0) {
+            return res.redirect('/signup?error=Username already exists');
+        }
+        
+        // Check if email already exists (if provided)
+        if (email) {
+            const [existingEmails] = await db.execute(
+                'SELECT * FROM users WHERE email = ?',
+                [email]
+            );
+            
+            if (existingEmails.length > 0) {
+                return res.redirect('/signup?error=Email already in use');
+            }
+        }
+
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
         await db.execute(
-            'INSERT INTO users (username, password_hash) VALUES (?, ?)',
-            [username, hashedPassword]
+            'INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)',
+            [username, hashedPassword, email || null]
         );
 
-        res.send("Account created successfully! You can now log in.");
+        res.redirect('/login?success=Account created successfully! You can now log in.');
     } catch (error) {
         console.error("Error during signup:", error);
-        res.status(500).send("Error creating account. Please try again.");
+        res.redirect('/signup?error=Error creating account. Please try again.');
     }
 });
 

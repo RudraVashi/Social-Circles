@@ -7,31 +7,128 @@
     <header>
         <h1>Account Information</h1>
     </header>
+    <% if (locals.errorMsg) { %>
+        <div class="message error"><%= errorMsg %></div>
+    <% } %>
+    <% if (locals.successMsg) { %>
+        <div class="message success"><%= successMsg %></div>
+    <% } %>
+
     <div class="Account">
         <div class="field">
             <p>Username</p>
             <span id="username"><%= user.username %></span>
         </div>
+        
         <div class="field">
             <p>Password</p>
             <span id="password">••••••••</span>
+            <button class="edit-btn" onclick="toggleForm('password-form')">Edit</button>
         </div>
+        
+        <!-- Password Update Form -->
+        <div id="password-form" class="form-container">
+            <form action="/accountinfo/update-password" method="POST">
+                <div>
+                    <label for="currentPassword">Current Password:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                <div>
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div>
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit">Update Password</button>
+                <button type="button" onclick="closeForm('password-form')">Cancel</button>
+            </form>
+        </div>
+        
         <div class="field">
             <p>Email</p>
             <span id="email"><%= user.email || 'Not provided' %></span>
+            <button class="edit-btn" onclick="toggleForm('email-form')">Edit</button>
         </div>
+        
+        <!-- Email Update Form -->
+        <div id="email-form" class="form-container">
+            <form action="/accountinfo/update-email" method="POST">
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email-input" name="email" value="<%= user.email || '' %>" required>
+                </div>
+                <button type="submit">Update Email</button>
+                <button type="button" onclick="closeForm('email-form')">Cancel</button>
+            </form>
+        </div>
+        
         <div class="field">
             <p>Biography</p>
             <span id="biography"><%= user.biography || 'Not provided' %></span>
+            <button class="edit-btn" onclick="toggleForm('bio-form')">Edit</button>
         </div>
+        
+        <!-- Biography Update Form -->
+        <div id="bio-form" class="form-container">
+            <form action="/accountinfo/update-bio" method="POST">
+                <div>
+                    <label for="biography">Biography:</label>
+                    <textarea id="bio-input" name="biography" rows="4" cols="50"><%= user.biography || '' %></textarea>
+                </div>
+                <button type="submit">Update Biography</button>
+                <button type="button" onclick="closeForm('bio-form')">Cancel</button>
+            </form>
+        </div>
+        
         <div class="field">
             <p>Total Score</p>
             <span id="totalScore"><%= user.total_score || 0 %></span>
         </div>
+        
         <div class="field">
             <p>High Score</p>
             <span id="highScore"><%= user.high_score || 0 %></span>
         </div>
     </div>
-    <a href ="/leaderboard">Leaderboard</a>
+    
+    <div class="navigation">
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/game">Play Game</a>
+    </div>
+    
+    <script>
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            
+            // If the form doesn't exist, return early
+            if (!form) return;
+            
+            // Get all form containers
+            const allForms = document.querySelectorAll('.form-container');
+            
+            // If the clicked form is already visible, hide it
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+                return;
+            }
+            
+            // Otherwise, hide all forms first
+            allForms.forEach(f => {
+                f.style.display = 'none';
+            });
+            
+            // Then show the clicked form
+            form.style.display = 'block';
+        }
+
+// Function specifically for cancel buttons
+        function closeForm(formId) {
+            const form = document.getElementById(formId);
+            if (form) {
+                form.style.display = 'none';
+            }
+        }
+    </script>
 </body>

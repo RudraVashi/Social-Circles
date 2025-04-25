@@ -28,8 +28,7 @@ header {
 }
 
 .forms{
-  margin-top: 5px;
-  margin-bottom: 30px;
+  margin-top: 35px;
   width: 180px;
 }
 
@@ -124,4 +123,8 @@ header {
 
 .leaderboard th {
   background-color: #f4f4f4;
+}
+
+.loginb{
+  justify-content: center;
 }

@@ -4,23 +4,43 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+    <header>
+        <h1>Account Information</h1>
+    </header>
     <div class="stuff">
-        <div class ="login">
-            <h1>Login Page</h1>
-            <div class = "forms">
-                <form action="/login" method="post">
+        <div class="login">
+            <% if (typeof error !== 'undefined') { %>
+                <% if (error === 'invalid') { %>
+                    <div class="error-message">Invalid username or password</div>
+                <% } else if (error) { %>
+                    <div class="error-message"><%= error %></div>
+                <% } %>
+            <% } %>
+            
+            <% if (typeof success !== 'undefined' && success) { %>
+                <div class="success-message"><%= success %></div>
+            <% } %>
+            
+            <form action="/login" method="POST">
+                <div class="forms">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username here"required><br><br>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="forms">
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password here "required><br><br>
-                    <input type="submit" value="Login In" >
-                </form>
-            </div> 
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            
+            <div class="login-link">
+                <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
         </div>  
-    </div>
-    <div class="login-link">
-        <p> Not registered an acoount yet? <a href="/signup">Sign up here</a></p>
-    </div>
     
 </body>
 </html>
