@@ -17,24 +17,29 @@ router.use(isAuthenticated);
 
 // Get account information
 router.get('/', async (req, res) => {
-    try {
-        // Get user data from database
-        const [users] = await db.execute("SELECT * FROM users WHERE id = ?", [req.session.user.id]);
-        
-        if (users.length === 0) {
-            req.session.destroy();
-            return res.redirect('/login');
-        }
-        
-        const user = users[0];
-        const errorMsg = req.query.error || null;
-        const successMsg = req.query.success || null;
-        
-        res.render('accountinfo', { user, errorMsg, successMsg });
-    } catch (error) {
-        console.error("Account Info Error:", error);
-        res.status(500).send("Error retrieving account information");
+    if (!req.session.user) {
+        return res.redirect('/login');
     }
+    const userId = req.session.user.id;
+    let score = 0;
+    try {
+        const [rows] = await db.execute(
+            'SELECT score FROM scores WHERE user_id = ? ORDER BY id DESC LIMIT 1',
+            [userId]
+        );
+        if (rows.length > 0) {
+            score = rows[0].score;
+        }
+    } catch (err) {
+        console.error('Error fetching score:', err);
+    }
+
+    res.render('accountinfo', {
+        user: req.session.user,
+        score: score,
+        errorMsg: null,
+        successMsg: null
+    });
 });
 
 // Handle biography update

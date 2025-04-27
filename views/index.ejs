@@ -201,6 +201,25 @@
         { id: 'jamal', name: 'Jamal', preferences: { invite: 7, help: -10, compliment: 9 } }
         ];
 
+        function saveScoreToServer(score) {
+            fetch('/score/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ score })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Score saved!');
+                } else {
+                    console.error('Failed to save score:', data.message);
+                }
+            })
+            .catch(err => console.error('Fetch error:', err));
+        }
+
         let circles = [
         { id: 'circle1', characters: ['elliott', 'rudra', 'ahmet'] },
         { id: 'circle2', characters: ['luna', 'maya', 'jamal'] }
@@ -296,24 +315,26 @@
 
         // Perform an action on a circle
         function performAction(circleId, action) {
-        if (!['invite', 'help', 'compliment'].includes(action)) {
-            throw new Error("Invalid action. Must be 'invite', 'help', or 'compliment'");
-        }
-        
-        const scoreResult = calculateScore(circleId, action);
-        gameState.score += scoreResult.raw; // This can now be negative
-        
-        gameState.history.push({
-            circleId,
-            action,
-            score: scoreResult.raw,
-            characters: getCircle(circleId).characters.map(id => getCharacter(id).name)
-        });
-        
-        return {
-            scoreResult,
-            gameState: { ...gameState }
-        };
+            if (!['invite', 'help', 'compliment'].includes(action)) {
+                throw new Error("Invalid action. Must be 'invite', 'help', or 'compliment'");
+            }
+            
+            const scoreResult = calculateScore(circleId, action);
+            gameState.score += scoreResult.raw; // This can now be negative
+            
+            saveScoreToServer(gameState.score);
+
+            gameState.history.push({
+                circleId,
+                action,
+                score: scoreResult.raw,
+                characters: getCircle(circleId).characters.map(id => getCharacter(id).name)
+            });
+            
+            return {
+                scoreResult,
+                gameState: { ...gameState }
+            };
         }
 
         // Shuffle characters between circles

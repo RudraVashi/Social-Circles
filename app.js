@@ -29,6 +29,9 @@ app.use(session({
     cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 } // 1 hour session
 }));
 
+const scoreRouter = require('./routes/score');
+app.use('/score', scoreRouter);
+
 // Add this for debugging
 app.use((req, res, next) => {
   console.log('Session check:', req.session ? 'Session exists' : 'No session');
