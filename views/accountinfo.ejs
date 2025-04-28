@@ -7,6 +7,13 @@
     <header>
         <h1>Account Information</h1>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/accountinfo">Profile</a>
+        <a href="/characters">Characters</a>
+        
+    </nav>
     <% if (locals.errorMsg) { %>
         <div class="message error"><%= errorMsg %></div>
     <% } %>
@@ -87,16 +94,6 @@
             <p>Score:</p>
             <span id="score"><%= typeof score !== 'undefined' ? score : 0 %></span>
         </div>
-        
-        <div class="field">
-            <p>High Score</p>
-            <span id="highScore"><%= user.high_score || 0 %></span>
-        </div>
-    </div>
-    
-    <div class="navigation">
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/">Play Game</a>
     </div>
     
     <script>
@@ -131,5 +128,6 @@
                 form.style.display = 'none';
             }
         }
+        
     </script>
 </body>
