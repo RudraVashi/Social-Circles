@@ -213,22 +213,39 @@
         ];
 
         function saveScoreToServer(score) {
+            console.log('Saving scores:', {
+                currentScore: score,
+                sessionHighScore: gameState.sessionHighScore
+            });
+            
+            const payload = { 
+                score: score,
+                sessionHighScore: gameState.sessionHighScore
+            };
+            
             fetch('/score/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ score })
+                body: JSON.stringify(payload)
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Score saved!');
-                } else {
-                    console.error('Failed to save score:', data.message);
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => {
+                        console.error('Error response:', text);
+                        throw new Error(`Server responded with ${res.status}: ${text}`);
+                    });
                 }
+                return res.json();
             })
-            .catch(err => console.error('Fetch error:', err));
+            .then(data => {
+                console.log('Scores saved successfully:', data);
+            })
+            .catch(err => {
+                console.error('Save score error:', err.message);
+                alert('Network error. Your scores might not be saved.');
+            });
         }
 
         let circles = [
@@ -237,10 +254,50 @@
         ];
 
         let gameState = {
-        score: 0,
-        selectedCircle: null,
-        history: []
+            score: 0,
+            highScore: 0,
+            sessionHighScore: 0,
+            selectedCircle: null,
+            history: []
         };
+
+
+        function loadScores() {
+            return fetch('/score/current')
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Failed to fetch scores');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log("Received score data:", data);
+                        
+                        // Store database high score
+                        gameState.highScore = data.highScore || 0;
+                        
+                        // Apply current accumulated score
+                        gameState.score = data.currentScore || 0;
+                        
+                        // Initialize session high score to match current score initially
+                        gameState.sessionHighScore = gameState.score;
+                        
+                        console.log('Game initialized with scores:', {
+                            currentScore: gameState.score,
+                            sessionHighScore: gameState.sessionHighScore,
+                            allTimeHighScore: gameState.highScore
+                        });
+                        
+                        updateScoreDisplay();
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading scores:', err);
+                });
+        }
+
+
 
         let shuffleTimer = null;
 
@@ -331,8 +388,22 @@
             }
             
             const scoreResult = calculateScore(circleId, action);
-            gameState.score += scoreResult.raw; // This can now be negative
             
+            // Store previous score before updating
+            const previousScore = gameState.score;
+            
+            // Update current score (can go up or down)
+            gameState.score += scoreResult.raw;
+            
+            console.log(`Score change: ${previousScore} -> ${gameState.score}`);
+            
+            // Update session high score if we've reached a new high
+            if (gameState.score > gameState.sessionHighScore) {
+                gameState.sessionHighScore = gameState.score;
+                console.log(`New session high score: ${gameState.sessionHighScore}`);
+            }
+            
+            // Save both scores to the server
             saveScoreToServer(gameState.score);
 
             gameState.history.push({
@@ -347,8 +418,7 @@
                 gameState: { ...gameState }
             };
         }
-
-        // Shuffle characters between circles
+        
         function shuffleCircles(showNotification = true) {
         // Collect all character IDs
         const allCharacterIds = circles.flatMap(circle => circle.characters);
@@ -393,8 +463,8 @@
 
         // DOM interaction functions
         function updateScoreDisplay() {
-        const scoreElement = document.querySelector('h2');
-        scoreElement.textContent = `Score: ${gameState.score}`;
+            const scoreElement = document.querySelector('h2');
+            scoreElement.textContent = `Score: ${gameState.score}`;
         }
 
         function updateCircleDisplay() {
@@ -470,6 +540,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Ensure all blocks and functions are properly closed
+        });
 
             updateScoreDisplay();
         
@@ -478,65 +550,67 @@
         
         // Debug check
         checkCirclesHaveNegativeAction();
-        
-        // Set up click handlers for circles
-        const circleElements = document.querySelectorAll('.group-circle');
-        circleElements.forEach((circle, index) => {
-            circle.addEventListener('click', () => {
-            circleElements.forEach(c => c.style.borderColor = '#620edf');
-            circle.style.borderColor = '#ff5500';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScores().then(() => {
+                ensureNegativeActions();
+                
+                const circleElements = document.querySelectorAll('.group-circle');
+                circleElements.forEach((circle, index) => {
+                    circle.addEventListener('click', () => {
+                        circleElements.forEach(c => c.style.borderColor = '#620edf');
+                        circle.style.borderColor = '#ff5500';
+                        
+                        gameState.selectedCircle = `circle${index + 1}`;
+                    });
+                });
+                const actionButtons = document.querySelectorAll('.group-buttons button');
             
-            gameState.selectedCircle = `circle${index + 1}`;
+                actionButtons[0].addEventListener('click', () => {
+                    if (!gameState.selectedCircle) {
+                    alert('Please select a circle first!');
+                    return;
+                    }
+                    
+                    const result = performAction(gameState.selectedCircle, 'compliment');
+                    updateScoreDisplay();
+                    showFeedback(gameState.selectedCircle, 'compliment', result.scoreResult);
+                    
+                    gameState.selectedCircle = null;
+                    circleElements.forEach(c => c.style.borderColor = '#620edf');
+                });
+                
+                actionButtons[1].addEventListener('click', () => {
+                    if (!gameState.selectedCircle) {
+                    alert('Please select a circle first!');
+                    return;
+                    }
+                    
+                    const result = performAction(gameState.selectedCircle, 'help');
+                    updateScoreDisplay();
+                    showFeedback(gameState.selectedCircle, 'help', result.scoreResult);
+                    
+                    gameState.selectedCircle = null;
+                    circleElements.forEach(c => c.style.borderColor = '#620edf');
+                });
+                
+                actionButtons[2].addEventListener('click', () => {
+                    if (!gameState.selectedCircle) {
+                    alert('Please select a circle first!');
+                    return;
+                    }
+                    
+                    const result = performAction(gameState.selectedCircle, 'invite');
+                    updateScoreDisplay();
+                    showFeedback(gameState.selectedCircle, 'invite', result.scoreResult);
+                    
+                    // Reset selection
+                    gameState.selectedCircle = null;
+                    circleElements.forEach(c => c.style.borderColor = '#620edf');
+                });
+            
+                // Start the automatic shuffle timer
+                startShuffleTimer();
             });
-        });
-        
-        const actionButtons = document.querySelectorAll('.group-buttons button');
-        
-        actionButtons[0].addEventListener('click', () => {
-            if (!gameState.selectedCircle) {
-            alert('Please select a circle first!');
-            return;
-            }
-            
-            const result = performAction(gameState.selectedCircle, 'compliment');
-            updateScoreDisplay();
-            showFeedback(gameState.selectedCircle, 'compliment', result.scoreResult);
-            
-            gameState.selectedCircle = null;
-            circleElements.forEach(c => c.style.borderColor = '#620edf');
-        });
-        
-        actionButtons[1].addEventListener('click', () => {
-            if (!gameState.selectedCircle) {
-            alert('Please select a circle first!');
-            return;
-            }
-            
-            const result = performAction(gameState.selectedCircle, 'help');
-            updateScoreDisplay();
-            showFeedback(gameState.selectedCircle, 'help', result.scoreResult);
-            
-            gameState.selectedCircle = null;
-            circleElements.forEach(c => c.style.borderColor = '#620edf');
-        });
-        
-        actionButtons[2].addEventListener('click', () => {
-            if (!gameState.selectedCircle) {
-            alert('Please select a circle first!');
-            return;
-            }
-            
-            const result = performAction(gameState.selectedCircle, 'invite');
-            updateScoreDisplay();
-            showFeedback(gameState.selectedCircle, 'invite', result.scoreResult);
-            
-            // Reset selection
-            gameState.selectedCircle = null;
-            circleElements.forEach(c => c.style.borderColor = '#620edf');
-        });
-        
-        // Start the automatic shuffle timer
-        startShuffleTimer();
         });
     </script>
 </body>

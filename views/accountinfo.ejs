@@ -94,11 +94,6 @@
             <p>Score:</p>
             <span id="score"><%= typeof score !== 'undefined' ? score : 0 %></span>
         </div>
-        
-        <div class="field">
-            <p>High Score</p>
-            <span id="highScore"><%= user.high_score || 0 %></span>
-        </div>
     </div>
     
     <script>
@@ -133,5 +128,6 @@
                 form.style.display = 'none';
             }
         }
+        
     </script>
 </body>
