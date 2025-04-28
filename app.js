@@ -34,10 +34,9 @@ app.use(session({
 const scoresRouter = require('./routes/scores');
 app.use('/score', scoresRouter);
 
-// Add this for debugging
-app.use((req, res, next) => {
-  console.log('Session check:', req.session ? 'Session exists' : 'No session');
-  next();
+app.post('/score/save-test', (req, res) => {
+  console.log('Received score data:', req.body);
+  res.json({ success: true, message: 'Test route works!' });
 });
 
 // Static files
