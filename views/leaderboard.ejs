@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,13 +19,12 @@
     </nav>
     
     <div class="leaderboard-container">
-        <h1>Leaderboard</h1>
         <table class="leaderboard">
             <thead>
                 <tr>
                     <th>Rank</th>
                     <th>Username</th>
-                    <th>High Score</th>
+                    <th>Score</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +32,7 @@
                     <tr>
                         <td><%= index + 1 %></td>
                         <td><%= player.username %></td>
-                        <td><%= player.highScore %></td>
+                        <td><%= player.score %></td>
                     </tr>
                 <% }); %>
             </tbody>

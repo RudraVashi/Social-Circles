@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const db = require('./database/db');
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -52,19 +54,45 @@ app.use('/users', usersRouter);
 app.use(authRoutes);
 app.use('/accountinfo', accountinfoRouter);
 
-app.get('/leaderboard', (req, res) => {
-  const players = [
-    { username: 'JohnDoe123', highScore: 300 },
-    { username: 'JaneSmith', highScore: 250 },
-    { username: 'CoolPlayer', highScore: 200 }
-  ];
+// app.get('/leaderboard', (req, res) => {
+//   const players = [
+//     { username: 'JohnDoe123', highScore: 300 },
+//     { username: 'JaneSmith', highScore: 250 },
+//     { username: 'CoolPlayer', highScore: 200 }
+//   ];
   
-  res.render('leaderboard', { 
-    title: 'Leaderboard',
-    players,
-    user: req.session.user ? req.session.user : null
-  });
+//   res.render('leaderboard', { 
+//     title: 'Leaderboard',
+//     players,
+//     user: req.session.user ? req.session.user : null
+//   });
+// });
+
+
+app.get('/leaderboard', async (req, res) => {
+  try {
+      const [players] = await db.execute(`
+          SELECT u.username, s.score
+          FROM users u
+          JOIN scores s ON u.id = s.user_id
+          ORDER BY s.score DESC
+          LIMIT 10
+      `);
+
+      res.render('leaderboard', {
+          title: 'Leaderboard',
+          players,
+          user: req.session.user ? req.session.user : null
+      });
+  } catch (err) {
+      console.error('Error fetching leaderboard data:', err);
+      res.status(500).json({ success: false, message: "Database error" });
+  }
 });
+
+
+
+
 
 app.get('/characters', (req, res) => {
   res.render('characters');
@@ -83,3 +111,9 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
