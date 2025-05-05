@@ -90,6 +90,16 @@ app.get('/leaderboard', async (req, res) => {
 });
 
 
+//TODO: Logging out
+app.get("/logout", (req, res) => {
+  // Destroy the user's session and send them to the login page
+  req.session.destroy((err) => {
+    if (err){
+      throw err;
+    }
+    res.redirect("/login");
+  });
+});
 
 
 
