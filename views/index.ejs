@@ -73,6 +73,13 @@
             background: #a7df9f;
             box-shadow: 0 0 10px rgba(206, 9, 9, 0.1);
             }
+            #logo {
+                width: 80px;
+                height: 80px;
+            }
+            #logoutBtn {
+                color: #a7df9f;
+            }
             .char {
             position: absolute;
             }
@@ -165,19 +172,25 @@
     </head>
     <body>
         <header>
-            <div>Logo</div>
+            <div>
+                <img id="logo" src="/images/sssLogo.png">
+            </div>
             <h1>Social Circles</h1>
             <div>
                 Welcome, 
                 <% if (user){ %>
                     <%=user.username%>
-                <%} else{ %>
+                <% } else{ %>
                 Guest
                 <% } %>
-            !
+                !
+                <% if (user){ %>
+                    <br>
+                    <br>
+                    <a id="logoutBtn" href="/logout">LOG OUT</a>
+                <% } %>
             </div>
         </header>
-        <a href="/logout">LOG OUT</a>
         <nav>
             <a href="#">Home</a>
             <a href="/leaderboard">Leaderboard</a>
