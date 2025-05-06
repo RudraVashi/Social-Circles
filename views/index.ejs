@@ -167,7 +167,15 @@
         <header>
             <div>Logo</div>
             <h1>Social Circles</h1>
-            <div>Welcome, [username]</div>
+            <div>
+                Welcome, 
+                <% if (user){ %>
+                    <%=user.username%>
+                <%} else{ %>
+                Guest
+                <% } %>
+            !
+            </div>
         </header>
         <a href="/logout">LOG OUT</a>
         <nav>
@@ -186,16 +194,16 @@
                 <div class="group-wrapper">
                   <div class="group-circle">
                     <!-- I'm using your linkedin profile pics, hope that's chill -->
-                    <div class="char char1"><img src="/images/elliott.jpeg" alt="Elliott"></div>
-                    <div class="char char2"><img src="/images/rudra.jpeg" alt="Rudra"></div>
-                    <div class="char char3"><img src="/images/ahmet.jpeg" alt="Ahmet"></div>
+                    <div class="char char1"><img src="/images/elliottNOBG.png" alt="Elliott"></div>
+                    <div class="char char2"><img src="/images/rudraNOBG.png" alt="Rudra"></div>
+                    <div class="char char3"><img src="/images/ahmetNOBG.png" alt="Ahmet"></div>
                   </div>
                 </div>
                 <div class="group-wrapper">
                   <div class="group-circle">
-                    <div class="char char1"><img src="https://via.placeholder.com/300" alt="Luna"></div>
-                    <div class="char char2"><img src="https://via.placeholder.com/300" alt="Maya"></div>
-                    <div class="char char3"><img src="https://via.placeholder.com/300" alt="Jamal"></div>
+                    <div class="char char1"><img src="/images/luna.png" alt="Luna"></div>
+                    <div class="char char2"><img src="/images/maya.png" alt="Maya"></div>
+                    <div class="char char3"><img src="/images/jamal.png" alt="Jamal"></div>
                 </div>
               </div>
           
@@ -208,9 +216,9 @@
     <script>
         // Character data with preferences - stronger negatives to ensure negative circle options
         const characters = [ // Adding an src attribute that stores the path to the character's image
-        { id: 'elliott', name: 'Elliott', preferences: { invite: 8, help: 5, compliment: -10 }, src: "/images/elliott.jpeg" },
-        { id: 'rudra', name: 'Rudra', preferences: { invite: -10, help: 9, compliment: 4 }, src: "/images/rudra.jpeg" },
-        { id: 'ahmet', name: 'Ahmet', preferences: { invite: 3, help: -10, compliment: 8 }, src: "/images/ahmet.jpeg" },
+        { id: 'elliott', name: 'Elliott', preferences: { invite: 8, help: 5, compliment: -10 }, src: "/images/elliottNOBG.png" },
+        { id: 'rudra', name: 'Rudra', preferences: { invite: -10, help: 9, compliment: 4 }, src: "/images/rudraNOBG.png" },
+        { id: 'ahmet', name: 'Ahmet', preferences: { invite: 3, help: -10, compliment: 8 }, src: "/images/ahmetNOBG.png" },
         { id: 'luna', name: 'Luna', preferences: { invite: 9, help: 3, compliment: -10 }, src: "/images/luna.png" },
         { id: 'maya', name: 'Maya', preferences: { invite: -10, help: 7, compliment: 6 }, src: "/images/maya.png" },
         { id: 'jamal', name: 'Jamal', preferences: { invite: 7, help: -10, compliment: 9 }, src: "/images/jamal.png" }
