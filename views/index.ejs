@@ -77,8 +77,10 @@
             position: absolute;
             }
             .char img {
-            width: 220px;
-            height: 160px;
+            width: 100px;
+            height: 100px;
+            /* width: 220px; */
+            /* height: 160px; */
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid black;
@@ -183,9 +185,10 @@
             <div class="circle-row">
                 <div class="group-wrapper">
                   <div class="group-circle">
-                    <div class="char char1"><img src="https://via.placeholder.com/300" alt="Elliott"></div>
-                    <div class="char char2"><img src="https://via.placeholder.com/300" alt="Rudra"></div>
-                    <div class="char char3"><img src="https://via.placeholder.com/300" alt="Ahmet"></div>
+                    <!-- I'm using your linkedin profile pics, hope that's chill -->
+                    <div class="char char1"><img src="/images/elliott.jpeg" alt="Elliott"></div>
+                    <div class="char char2"><img src="/images/rudra.jpeg" alt="Rudra"></div>
+                    <div class="char char3"><img src="/images/ahmet.jpeg" alt="Ahmet"></div>
                   </div>
                 </div>
                 <div class="group-wrapper">
@@ -204,13 +207,13 @@
           </div>
     <script>
         // Character data with preferences - stronger negatives to ensure negative circle options
-        const characters = [
-        { id: 'elliott', name: 'Elliott', preferences: { invite: 8, help: 5, compliment: -10 } },
-        { id: 'rudra', name: 'Rudra', preferences: { invite: -10, help: 9, compliment: 4 } },
-        { id: 'ahmet', name: 'Ahmet', preferences: { invite: 3, help: -10, compliment: 8 } },
-        { id: 'luna', name: 'Luna', preferences: { invite: 9, help: 3, compliment: -10 } },
-        { id: 'maya', name: 'Maya', preferences: { invite: -10, help: 7, compliment: 6 } },
-        { id: 'jamal', name: 'Jamal', preferences: { invite: 7, help: -10, compliment: 9 } }
+        const characters = [ // Adding an src attribute that stores the path to the character's image
+        { id: 'elliott', name: 'Elliott', preferences: { invite: 8, help: 5, compliment: -10 }, src: "/images/elliott.jpeg" },
+        { id: 'rudra', name: 'Rudra', preferences: { invite: -10, help: 9, compliment: 4 }, src: "/images/rudra.jpeg" },
+        { id: 'ahmet', name: 'Ahmet', preferences: { invite: 3, help: -10, compliment: 8 }, src: "/images/ahmet.jpeg" },
+        { id: 'luna', name: 'Luna', preferences: { invite: 9, help: 3, compliment: -10 }, src: "/images/luna.png" },
+        { id: 'maya', name: 'Maya', preferences: { invite: -10, help: 7, compliment: 6 }, src: "/images/maya.png" },
+        { id: 'jamal', name: 'Jamal', preferences: { invite: 7, help: -10, compliment: 9 }, src: "/images/jamal.png" }
         ];
 
         function saveScoreToServer(score) {
@@ -484,6 +487,7 @@
             
             // In a real implementation, you would set the src to the character's image
             // For now, we'll keep the placeholders
+            charElements[charIndex].src = getCharacter(charId).src;
             });
         });
         }
