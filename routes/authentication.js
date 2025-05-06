@@ -5,9 +5,9 @@ const db = require('../database/db');
 
 const SALT_ROUNDS = 10;
 
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
     const error = req.query.error || null;
-    res.render('login', { error });
+    res.render('login', {msg: ""});
 });
 
 router.post('/login', async (req, res) => {
@@ -17,14 +17,14 @@ router.post('/login', async (req, res) => {
         const [users] = await db.execute("SELECT * FROM users WHERE username = ?", [username]);
 
         if (users.length === 0) {
-            return res.redirect('/login?error=invalid');
+            res.render("login", { msg: "Wrong Username or Password." });
         }
 
         const user = users[0];
 
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
-            return res.redirect('/login?error=invalid');
+            res.render("login", { msg: "Wrong Username or Password." });
         }
 
         req.session.user = {
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
         res.redirect('/accountinfo');
     } catch (error) {
         console.error("Login Error:", error);
-        res.status(500).send("Error logging in");
+        //res.status(500).send("Error logging in");
     }
 });
 
@@ -95,7 +95,7 @@ router.post('/signup', async (req, res) => {
             [username, hashedPassword, email || null]
         );
 
-        res.redirect('/login?success=Account created successfully! You can now log in.');
+        res.render("login", { msg: "Account created Successfully!." });
     } catch (error) {
         console.error("Error during signup:", error);
         res.redirect('/signup?error=Error creating account. Please try again.');
