@@ -419,7 +419,9 @@
             
             // Update current score (can go up or down)
             gameState.score += scoreResult.raw;
-            
+            if (gameState.score < 0) gameState.score = 0;
+            updateScoreDisplay();  
+
             console.log(`Score change: ${previousScore} -> ${gameState.score}`);
             
             // Update session high score if we've reached a new high

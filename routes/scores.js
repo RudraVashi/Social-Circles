@@ -14,7 +14,7 @@ router.post('/save', async (req, res) => {
     console.log('Request body:', req.body);
     
     const userId = req.session.user && req.session.user.id;
-    const currentScore = req.body.score;
+    const currentScore = Math.max(Number(req.body.score), 0);
     const sessionHighScore = req.body.sessionHighScore || currentScore; // Fallback in case not provided
 
     console.log("Processing score save:", { userId, currentScore, sessionHighScore });
