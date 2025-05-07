@@ -47,11 +47,11 @@ Social Circles lets users:
    - contains log out button
 
 2. **Leaderboard**
-   - `/leaderboard` shows top users and their high scores
+   - shows top users and their high scores
 
 3. **Profile**
    - click as guest in order to sign up or log in
-   - `/profile` shows your username and current point total
+   - shows your username and current point total
    - allows editing of password, email, and a biography
   
 4. **Charactern**
