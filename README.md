@@ -14,7 +14,7 @@ Social Circles lets users:
 - Earn points and participate in the leaderboard
 
 
-## 🔧 Developer Setup Guide
+##  Developer Setup Guide
 
 1. **Clone the repo**
    ```bash
